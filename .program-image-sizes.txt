@@ -1,0 +1,5 @@
+C:\projects\TBB-Holiday\public\images\effortlessextensions.png	289488
+C:\projects\TBB-Holiday\public\images\turnlikeanathlete.png	330079
+C:\projects\TBB-Holiday\public\images\jumpersedge.png	481442
+C:\projects\TBB-Holiday\public\images\stageready.png	279105
+C:\projects\TBB-Holiday\public\images\bulletproofbody.png	339155

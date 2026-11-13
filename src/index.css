@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f3eee6;
+  color: #111111;
+  font-family: "Inter", system-ui, sans-serif;
+  font-style: normal;
+}
+
+h1,
+h2 {
+  font-style: italic;
+}
+
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.reveal-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.program-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  transition:
+    grid-template-columns 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.program-image {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-width: 0;
+  overflow: hidden;
+  transition: grid-template-rows 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.program-image[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .program-featured {
+    grid-template-columns: minmax(0, 1fr) 0fr;
+  }
+
+  .program-featured[data-open="true"] {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 38%);
+  }
+
+  .program-image,
+  .program-image[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+}
+
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.reveal-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.program-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  transition:
+    grid-template-columns 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.program-image {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-width: 0;
+  overflow: hidden;
+  transition: grid-template-rows 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.program-image[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .program-featured {
+    grid-template-columns: minmax(0, 1fr) 0fr;
+  }
+
+  .program-featured[data-open="true"] {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 38%);
+  }
+
+  .program-image,
+  .program-image[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+}
+
+::selection {
+  background: #c4a484;
+  color: #111111;
+}
