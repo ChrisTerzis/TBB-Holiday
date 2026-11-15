@@ -172,14 +172,79 @@ function Logo() {
   );
 }
 
-function GiftModal({ planId, onClose, onSelect, onComplete }) {
+const API_BASE = import.meta.env.VITE_TBB_API_BASE ?? "https://thebarbellballerina.com";
+const API_TIERS = { strength: "strength_athlete", performance: "performance_athlete" };
+// End of 24 Dec Sydney time; confirm with client.
+const OFFER_ENDS_AT = "2026-12-25T00:00:00+11:00";
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+const UTM_STORAGE_KEY = "tbb_holiday_utm";
+
+function isOfferEnded() {
+  return Date.now() >= Date.parse(OFFER_ENDS_AT);
+}
+
+// Reads UTM params from the URL on load and keeps them in sessionStorage so they survive in-page navigation.
+function readUtm() {
+  const params = new URLSearchParams(window.location.search);
+  const fromUrl = {};
+  for (const key of UTM_KEYS) {
+    const value = params.get(key);
+    if (value) fromUrl[key] = value;
+  }
+  try {
+    if (Object.keys(fromUrl).length > 0) {
+      window.sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(fromUrl));
+      return fromUrl;
+    }
+    return JSON.parse(window.sessionStorage.getItem(UTM_STORAGE_KEY) ?? "{}") ?? {};
+  } catch {
+    return fromUrl;
+  }
+}
+
+function GiftModal({ planId, utm, onClose, onSelect }) {
   const plan = plans.find((item) => item.id === planId) ?? plans[1];
   const [email, setEmail] = useState("");
+  const [purchaserEmail, setPurchaserEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
-    if (!email.includes("@")) return;
-    onComplete({ email, plan });
+    if (!email.includes("@") || loading) return;
+    setLoading(true);
+    setError("");
+    try {
+      const response = await fetch(`${API_BASE}/api/checkout/session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tier: API_TIERS[plan.id],
+          period: "annual",
+          email,
+          gift: true,
+          ...(purchaserEmail ? { purchaserEmail } : {}),
+          ...(Object.keys(utm).length > 0 ? { utm } : {}),
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data.url) {
+        window.location.assign(data.url);
+        return;
+      }
+      if (response.status === 409 && data.code === "already_subscribed") {
+        setError("This dancer already has an active membership, so there’s nothing to gift right now. Double-check the email, or choose another dancer.");
+      } else if (response.status === 410 && data.code === "offer_ended") {
+        setError("Sorry, the holiday gift offer has ended, so we can’t start a gift checkout.");
+      } else if (response.status === 400 && data.message) {
+        setError(data.message);
+      } else {
+        setError("Something went wrong starting checkout. Please try again in a moment.");
+      }
+    } catch {
+      setError("We couldn’t reach checkout. Please check your connection and try again.");
+    }
+    setLoading(false);
   }
 
   return (
@@ -228,12 +293,31 @@ function GiftModal({ planId, onClose, onSelect, onComplete }) {
                 className="mt-2 w-full rounded-lg border border-ink/15 bg-white px-4 py-3 text-ink outline-none focus:border-ink"
               />
             </label>
+            <label className="block text-sm text-stone">
+              Your email (for the receipt)
+              <input
+                type="email"
+                value={purchaserEmail}
+                onChange={(event) => setPurchaserEmail(event.target.value)}
+                placeholder="you@email.com (optional)"
+                className="mt-2 w-full rounded-lg border border-ink/15 bg-white px-4 py-3 text-ink outline-none focus:border-ink"
+              />
+            </label>
             <p className="text-sm leading-relaxed text-stone">
-              Use the dancer’s email address at checkout, not your own. Enter {plan.code} to receive the
-              holiday discount.
+              Use the dancer’s email address at checkout, not your own. Your {plan.code} discount is
+              applied automatically at checkout.
             </p>
-            <button type="submit" className="w-full rounded-md bg-ink px-6 py-3 text-sm text-cream">
-              Gift {plan.name} — ${plan.price}
+            {error && (
+              <p role="alert" className="text-sm leading-relaxed text-bronze">
+                {error}
+              </p>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-md bg-ink px-6 py-3 text-sm text-cream disabled:opacity-60"
+            >
+              {loading ? "Taking you to checkout…" : `Gift ${plan.name} — $${plan.price}`}
             </button>
           </form>
       </div>
@@ -345,7 +429,15 @@ function ThankYou() {
   );
 }
 
-function PlanCard({ plan, onGift }) {
+function OfferEnded({ className }) {
+  return (
+    <button type="button" disabled className={`${className} cursor-not-allowed opacity-60`}>
+      Offer ended
+    </button>
+  );
+}
+
+function PlanCard({ plan, offerEnded, onGift }) {
   const dark = plan.tone === "dark";
   return (
     <article
@@ -381,15 +473,19 @@ function PlanCard({ plan, onGift }) {
         <span className={dark ? "text-cream/60" : "text-stone"}>Promo code</span>
         <span className={dark ? "text-bronze" : "text-ink"}>{plan.code}</span>
       </div>
-      <button
-        type="button"
-        onClick={() => onGift(plan.id)}
-        className={`mt-6 w-full rounded-md px-6 py-4 text-sm ${
-          dark ? "bg-sand text-ink" : "bg-ink text-cream"
-        }`}
-      >
-        Gift {plan.name.split(" ")[0]} — ${plan.price}
-      </button>
+      {offerEnded ? (
+        <OfferEnded className={`mt-6 w-full rounded-md px-6 py-4 text-sm ${dark ? "bg-sand text-ink" : "bg-ink text-cream"}`} />
+      ) : (
+        <button
+          type="button"
+          onClick={() => onGift(plan.id)}
+          className={`mt-6 w-full rounded-md px-6 py-4 text-sm ${
+            dark ? "bg-sand text-ink" : "bg-ink text-cream"
+          }`}
+        >
+          Gift {plan.name.split(" ")[0]} — ${plan.price}
+        </button>
+      )}
     </article>
   );
 }
@@ -495,12 +591,19 @@ export default function App() {
   const [openFaq, setOpenFaq] = useState(0);
   const [giftPlan, setGiftPlan] = useState(null);
   const [legal, setLegal] = useState(null);
-  const [thankYou, setThankYou] = useState(false);
+  const [giftStatus] = useState(() => new URLSearchParams(window.location.search).get("gift"));
+  const [utm] = useState(readUtm);
+  const offerEnded = isOfferEnded();
 
-  if (thankYou) return <ThankYou />;
+  if (giftStatus === "success") return <ThankYou />;
 
   return (
     <div className="bg-cream text-ink">
+      {giftStatus === "cancelled" && (
+        <p className="bg-sand px-6 py-3 text-center text-sm text-ink">
+          Checkout was cancelled, so no payment was taken. You can start your gift again whenever you’re ready.
+        </p>
+      )}
       <header className="bg-ink text-cream">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-6 lg:px-10">
           <Logo />
@@ -531,20 +634,26 @@ export default function App() {
             </p>
             <p className="mt-4 text-cream/85">Buy it now. It’s ready whenever they are.</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => setGiftPlan("performance")}
-                className="rounded-md bg-sand px-5 py-3 text-sm text-ink"
-              >
-                Gift Performance — $299
-              </button>
-              <button
-                type="button"
-                onClick={() => setGiftPlan("strength")}
-                className="rounded-md border border-cream/30 px-5 py-3 text-sm text-cream"
-              >
-                Gift Strength — $199
-              </button>
+              {offerEnded ? (
+                <OfferEnded className="rounded-md bg-sand px-5 py-3 text-sm text-ink" />
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setGiftPlan("performance")}
+                    className="rounded-md bg-sand px-5 py-3 text-sm text-ink"
+                  >
+                    Gift Performance — $299
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGiftPlan("strength")}
+                    className="rounded-md border border-cream/30 px-5 py-3 text-sm text-cream"
+                  >
+                    Gift Strength — $199
+                  </button>
+                </>
+              )}
             </div>
             <p className="mt-5 text-xs text-cream/50">
               Holiday offer ends December 24, 2026, at midnight.
@@ -592,7 +701,7 @@ export default function App() {
         </h2>
         <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-2">
           {plans.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} onGift={setGiftPlan} />
+            <PlanCard key={plan.id} plan={plan} offerEnded={offerEnded} onGift={setGiftPlan} />
           ))}
         </div>
         <p className="mt-8 max-w-3xl text-sm leading-relaxed text-stone">
@@ -615,7 +724,7 @@ export default function App() {
           <span aria-hidden="true" className="absolute inset-x-0 top-3 hidden border-t border-[#DDD4C8] md:block" />
           {[
             ["/images/mouse-pointer-click%201.svg", "01", "Choose a Plan", "Select Strength Athlete or Performance Athlete."],
-            ["/images/ticket%201.svg", "02", "Apply the Gift Code", "Enter GIFT or GIFTPLUS at checkout to receive the holiday discount."],
+            ["/images/ticket%201.svg", "02", "Get the Holiday Discount", "Your GIFT or GIFTPLUS discount is applied automatically at checkout."],
             ["/images/mail%201.svg", "03", "Use the Dancer’s Email", "Use the dancer’s email. They’ll get their welcome email right away, so they can start now or save it for after Nutcracker."],
           ].map(([icon, n, title, body], index) => (
             <li key={n} className="relative border-t border-[#DDD4C8] pt-8 md:border-0 md:pt-0">
@@ -783,22 +892,28 @@ export default function App() {
           The perfect gift for the dancer who gives everything to their craft.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <button
-            type="button"
-            onClick={() => setGiftPlan("performance")}
-            className="rounded-md bg-sand px-5 py-3 text-sm text-ink"
-          >
-            Gift Performance — $299
-          </button>
-          <button
-            type="button"
-            onClick={() => setGiftPlan("strength")}
-            className="rounded-md border border-cream/30 px-5 py-3 text-sm"
-          >
-            Gift Strength — $199
-          </button>
+          {offerEnded ? (
+            <OfferEnded className="rounded-md bg-sand px-5 py-3 text-sm text-ink" />
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => setGiftPlan("performance")}
+                className="rounded-md bg-sand px-5 py-3 text-sm text-ink"
+              >
+                Gift Performance — $299
+              </button>
+              <button
+                type="button"
+                onClick={() => setGiftPlan("strength")}
+                className="rounded-md border border-cream/30 px-5 py-3 text-sm"
+              >
+                Gift Strength — $199
+              </button>
+            </>
+          )}
         </div>
-        <p className="mt-8 text-sm text-cream/60">Use code GIFT or GIFTPLUS at checkout.</p>
+        <p className="mt-8 text-sm text-cream/60">GIFT or GIFTPLUS is applied automatically at checkout.</p>
         <p className="mt-1 text-sm text-cream/60">Offer ends December 24 at midnight.</p>
       </section>
 
@@ -818,16 +933,12 @@ export default function App() {
         </div>
       </footer>
 
-      {giftPlan && (
+      {giftPlan && !offerEnded && (
         <GiftModal
           planId={giftPlan}
+          utm={utm}
           onClose={() => setGiftPlan(null)}
           onSelect={setGiftPlan}
-          onComplete={() => {
-            setGiftPlan(null);
-            setThankYou(true);
-            window.scrollTo(0, 0);
-          }}
         />
       )}
 
