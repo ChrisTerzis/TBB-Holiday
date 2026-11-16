@@ -12,7 +12,7 @@ export default {
         stone: "#6E675F",
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', "Georgia", "serif"],
+        serif: ['"Prata"', "Georgia", "serif"],
         sans: ['"Inter"', "system-ui", "sans-serif"],
       },
       boxShadow: {

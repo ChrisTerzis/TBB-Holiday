@@ -15,8 +15,17 @@ body {
 }
 
 h1,
-h2 {
-  font-style: italic;
+h2,
+h3,
+.font-serif {
+  font-family: "Prata", Georgia, serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+h3 {
+  letter-spacing: -0.025em;
 }
 
 .reveal {

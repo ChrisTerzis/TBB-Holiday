@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const HERO_IMAGE = "/images/hero%201.png";
-const STUDIO_IMAGE = "/images/stageready%201.png";
+const STUDIO_IMAGE = "/images/stageready.png";
 
 const plans = [
   {
@@ -262,7 +262,7 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
             Close
           </button>
         </div>
-        <h2 id="gift-title" className="mt-3 font-serif text-4xl leading-none">
+        <h2 id="gift-title" className="mt-3 font-serif text-4xl leading-[0.95]">
           Give a gift
         </h2>
         <form onSubmit={submit} className="mt-6 space-y-5">
@@ -304,7 +304,7 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
               />
             </label>
             <p className="text-sm leading-relaxed text-stone">
-              Use the dancer’s email address at checkout, not your own. Your {plan.code} discount is
+              Use the dancer’s email address at checkout, not your own. Your discount is
               applied automatically at checkout.
             </p>
             {error && (
@@ -315,7 +315,7 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-ink px-6 py-3 text-sm text-cream disabled:opacity-60"
+              className="w-full rounded-md bg-ink px-6 py-3 text-xs font-bold uppercase tracking-[0.22em] text-cream disabled:opacity-60"
             >
               {loading ? "Taking you to checkout…" : `Gift ${plan.name} — $${plan.price}`}
             </button>
@@ -338,8 +338,8 @@ function ThankYou() {
     <div className="min-h-screen bg-cream text-ink">
       <div className="mx-auto max-w-[1200px] px-6 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-lg text-center">
-          <h1 className="font-serif text-5xl leading-none sm:text-6xl">Thank You!</h1>
-          <p className="mt-5 font-serif text-xl">Your gift membership is confirmed.</p>
+          <h1 className="font-serif text-5xl leading-[0.95] sm:text-6xl">Thank You!</h1>
+          <p className="mt-5 text-xl">Your gift membership is confirmed.</p>
           <p className="mt-3 text-sm leading-relaxed text-stone">
             The dancer will receive a welcome email with everything they need to download the app and start
             training.
@@ -349,7 +349,7 @@ function ThankYou() {
         <div className="mt-12 grid items-center gap-10 bg-[#FBF7F2] p-6 sm:p-10 lg:grid-cols-2 lg:gap-16">
           <div className="border border-ink/15 bg-white px-8 py-10 text-center">
             <Logo />
-            <p className="mx-auto mt-8 max-w-xs font-serif text-4xl leading-none">
+            <p className="mx-auto mt-8 max-w-xs font-serif text-4xl leading-[0.95]">
               A year of <span className="text-bronze">strength.</span>
             </p>
             <div className="mx-auto mt-8 max-w-xs space-y-4 text-left text-xs uppercase tracking-[0.16em] text-stone">
@@ -378,7 +378,7 @@ function ThankYou() {
             <a
               href={GIFT_CERTIFICATE_PDF}
               download="TBB-Gift-Certificate-final2.pdf"
-              className="mt-8 inline-flex items-center gap-3 rounded-md bg-sand px-5 py-4 text-sm text-ink"
+              className="mt-8 inline-flex items-center gap-3 rounded-md bg-sand px-5 py-4 text-xs font-bold uppercase tracking-[0.25em] text-ink"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" strokeWidth="1.6" />
@@ -453,7 +453,7 @@ function PlanCard({ plan, offerEnded, onGift }) {
       <p className={`text-[11px] uppercase tracking-[0.22em] ${dark ? "text-bronze" : "text-stone"}`}>
         Annual gift
       </p>
-      <h3 className="mt-4 text-4xl leading-none">{plan.name}</h3>
+      <h3 className="mt-4 text-4xl tracking-tight">{plan.name}</h3>
       <p className="mt-6 flex items-end gap-3">
         <span className="text-6xl leading-none">${plan.price}</span>
         <span className={`mb-1 text-2xl line-through ${dark ? "text-cream/40" : "text-stone"}`}>
@@ -469,17 +469,13 @@ function PlanCard({ plan, offerEnded, onGift }) {
           </li>
         ))}
       </ul>
-      <div className={`mt-auto flex items-center justify-between border-t pt-4 text-xs uppercase tracking-[0.16em] ${dark ? "border-cream/15" : "border-ink/10"}`}>
-        <span className={dark ? "text-cream/60" : "text-stone"}>Promo code</span>
-        <span className={dark ? "text-bronze" : "text-ink"}>{plan.code}</span>
-      </div>
       {offerEnded ? (
-        <OfferEnded className={`mt-6 w-full rounded-md px-6 py-4 text-sm ${dark ? "bg-sand text-ink" : "bg-ink text-cream"}`} />
+        <OfferEnded className={`mt-6 w-full rounded-md px-6 py-4 text-xs font-bold uppercase tracking-[0.22em] ${dark ? "bg-sand text-ink" : "bg-ink text-cream"}`} />
       ) : (
         <button
           type="button"
           onClick={() => onGift(plan.id)}
-          className={`mt-6 w-full rounded-md px-6 py-4 text-sm ${
+          className={`mt-6 w-full rounded-md px-6 py-4 text-xs font-bold uppercase tracking-[0.22em] ${
             dark ? "bg-sand text-ink" : "bg-ink text-cream"
           }`}
         >
@@ -498,7 +494,7 @@ function Programs() {
       <div className="mx-auto max-w-7xl px-6 pb-16 pt-16 lg:px-10">
         <div className="flex flex-col gap-6 border-t border-ink/10 pt-16 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-xl">
-            <h2 className="font-serif text-4xl leading-tight sm:text-5xl">Five programs. Built for ballet.</h2>
+            <h2 className="font-serif text-4xl leading-[0.95] sm:text-5xl">Five programs. Built for ballet.</h2>
             <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-stone">
               Purpose-built programs for stronger technique, resilient movement, and confident performance.
             </p>
@@ -540,7 +536,7 @@ function FeaturedProgram({ program, open }) {
   return (
     <div data-open={open} className={`program-featured ${open ? "py-8 lg:py-10" : "py-6"}`}>
       <div className="relative flex min-w-0 items-start gap-5 sm:gap-8">
-        <span className="mt-1 w-8 shrink-0 font-serif text-lg text-bronze">{program.n}</span>
+        <span className="mt-1 w-8 shrink-0 text-lg text-bronze">{program.n}</span>
         <div className="min-w-0 flex-1 sm:pr-40">
           <div data-open={open} className="reveal">
             <div className="reveal-inner">
@@ -549,7 +545,7 @@ function FeaturedProgram({ program, open }) {
               </p>
             </div>
           </div>
-          <span className="block font-serif text-2xl leading-none sm:text-[1.85rem]">{program.title}</span>
+          <span className="block font-serif text-2xl leading-[1.15] sm:text-[1.85rem]">{program.title}</span>
           <span
             className={`mt-2 block text-[10px] font-medium uppercase tracking-[0.22em] text-stone sm:hidden ${
               open ? "hidden" : ""
@@ -609,7 +605,7 @@ export default function App() {
           <Logo />
           <a
             href="#plans"
-            className="rounded-md bg-sand px-5 py-2.5 text-sm text-ink"
+            className="rounded-md bg-sand px-5 py-2.5 text-xs font-bold uppercase tracking-[0.25em] text-ink"
           >
             Give a gift
           </a>
@@ -618,13 +614,13 @@ export default function App() {
         <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-6 pb-20 pt-8 lg:grid-cols-2 lg:px-10 lg:pb-28">
           <div>
             <p className="text-[11px] uppercase tracking-[0.24em] text-bronze">Holiday gifting 2026</p>
-            <h1 className="mt-6 font-serif text-5xl leading-[0.92] sm:text-7xl">
+            <h1 className="mt-6 font-serif text-5xl leading-[0.95] sm:text-7xl">
               Give the Gift
               <br />
               of Strength.
             </h1>
-            <p className="mt-4 text-4xl leading-[0.95] text-bronze sm:text-6xl">
-              For the dancer in
+            <p className="mt-4 font-serif text-4xl leading-[0.95] text-bronze sm:text-6xl">
+              to the dancer in
               <br />
               your life.
             </p>
@@ -635,20 +631,20 @@ export default function App() {
             <p className="mt-4 text-cream/85">Buy it now. It’s ready whenever they are.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               {offerEnded ? (
-                <OfferEnded className="rounded-md bg-sand px-5 py-3 text-sm text-ink" />
+                <OfferEnded className="rounded-md bg-sand px-5 py-3 text-xs font-bold uppercase tracking-[0.25em] text-ink" />
               ) : (
                 <>
                   <button
                     type="button"
                     onClick={() => setGiftPlan("performance")}
-                    className="rounded-md bg-sand px-5 py-3 text-sm text-ink"
+                    className="rounded-md bg-sand px-5 py-3 text-xs font-bold uppercase tracking-[0.25em] text-ink"
                   >
                     Gift Performance — $299
                   </button>
                   <button
                     type="button"
                     onClick={() => setGiftPlan("strength")}
-                    className="rounded-md border border-cream/30 px-5 py-3 text-sm text-cream"
+                    className="rounded-md border border-cream/30 px-5 py-3 text-xs font-bold uppercase tracking-[0.25em] text-cream"
                   >
                     Gift Strength — $199
                   </button>
@@ -681,7 +677,11 @@ export default function App() {
 
       <div className="flex min-h-[84px] items-center justify-center bg-white px-6 text-stone">
         <p className="flex flex-wrap items-center justify-center gap-y-2 py-[30px] text-base leading-6">
-          <span>Created by professional ballerina Lili Pfeifer</span>
+          <span>Sports medicine physician approved</span>
+          <span className="inline-flex items-center">
+            <span aria-hidden="true" className="mx-3 h-1.5 w-1.5 shrink-0 rounded-full bg-stone sm:mx-[60px]" />
+            Created by professional ballerina <span className="ml-1 font-bold"> Lili Pfeifer</span>
+          </span>
           <span className="inline-flex items-center">
             <span aria-hidden="true" className="mx-3 h-1.5 w-1.5 shrink-0 rounded-full bg-stone sm:mx-[60px]" />
             100,000+ community
@@ -724,7 +724,7 @@ export default function App() {
           <span aria-hidden="true" className="absolute inset-x-0 top-3 hidden border-t border-[#DDD4C8] md:block" />
           {[
             ["/images/mouse-pointer-click%201.svg", "01", "Choose a Plan", "Select Strength Athlete or Performance Athlete."],
-            ["/images/ticket%201.svg", "02", "Get the Holiday Discount", "Your GIFT or GIFTPLUS discount is applied automatically at checkout."],
+            ["/images/ticket%201.svg", "02", "Get the Holiday Discount", "Your discount is applied automatically at checkout."],
             ["/images/mail%201.svg", "03", "Use the Dancer’s Email", "Use the dancer’s email. They’ll get their welcome email right away, so they can start now or save it for after Nutcracker."],
           ].map(([icon, n, title, body], index) => (
             <li key={n} className="relative border-t border-[#DDD4C8] pt-8 md:border-0 md:pt-0">
@@ -736,17 +736,17 @@ export default function App() {
                 <img src={icon} alt="" className="h-6 w-6" />
               </span>
               <p className="text-xs text-bronze md:mt-12">{n}</p>
-              <h3 className="mt-3 text-3xl">{title}</h3>
+              <h3 className="mt-3 text-3xl tracking-tight">{title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-stone">{body}</p>
             </li>
           ))}
         </ol>
         <div className="mt-12 flex gap-5 bg-ink px-6 py-8 text-cream sm:px-10">
-          <span className="mt-1 text-bronze" aria-hidden="true">
+          <span className="mt-1 text-2xl leading-none text-bronze" aria-hidden="true">
             ✉
           </span>
           <div>
-            <p className="text-3xl leading-tight sm:text-4xl">
+            <p className="font-serif text-3xl leading-tight sm:text-4xl">
               Important: Use the dancer’s email address at checkout,{" "}
               <span className="text-bronze">not your own.</span>
             </p>
@@ -761,7 +761,7 @@ export default function App() {
       <section className="mx-auto grid max-w-[1200px] items-start gap-x-16 gap-y-12 px-6 pb-24 lg:grid-cols-2 lg:px-10">
         <div>
           <p className="text-[11px] uppercase tracking-[0.22em] text-bronze">Why gift TBB</p>
-          <h2 className="mt-5 font-serif text-5xl leading-[0.92] sm:text-6xl">
+          <h2 className="mt-5 font-serif text-5xl leading-[0.95] sm:text-6xl">
             More Than a Gift.
             <span className="mt-2 block text-bronze">
               Strength for Every
@@ -783,7 +783,7 @@ export default function App() {
             >
               <p className="pt-1.5 text-xs text-bronze">{reason.n}</p>
               <div>
-                <h3 className="text-3xl leading-none">{reason.title}</h3>
+                <h3 className="text-3xl tracking-tight">{reason.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-stone">{reason.body}</p>
               </div>
             </li>
@@ -802,7 +802,7 @@ export default function App() {
               Programs built for ballet. Guided workouts. A weekly structure you can follow.
             </p>
             <blockquote className="mt-10 max-w-md border-l border-bronze pl-5">
-              <p className="text-2xl leading-snug">
+              <p className="font-serif text-2xl leading-snug">
                 “My footwork, jump height, power and stamina have all improved dramatically.”
               </p>
               <footer className="mt-4 text-[11px] uppercase tracking-[0.18em] text-bronze">
@@ -843,7 +843,7 @@ export default function App() {
               ],
             ].map(([quote, name]) => (
               <blockquote key={name}>
-                <p className="font-serif text-[22px] italic leading-[1.45]">“{quote}”</p>
+                <p className="font-serif text-[22px] leading-[1.45]">“{quote}”</p>
                 <footer className="mt-5 text-[11px] uppercase tracking-[0.18em] text-stone">{name}</footer>
               </blockquote>
             ))}
@@ -893,27 +893,27 @@ export default function App() {
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {offerEnded ? (
-            <OfferEnded className="rounded-md bg-sand px-5 py-3 text-sm text-ink" />
+            <OfferEnded className="rounded-md bg-sand px-5 py-3 text-xs font-bold uppercase tracking-[0.25em] text-ink" />
           ) : (
             <>
               <button
                 type="button"
                 onClick={() => setGiftPlan("performance")}
-                className="rounded-md bg-sand px-5 py-3 text-sm text-ink"
+                className="rounded-md bg-sand px-5 py-3 text-xs font-bold uppercase tracking-[0.25em] text-ink"
               >
                 Gift Performance — $299
               </button>
               <button
                 type="button"
                 onClick={() => setGiftPlan("strength")}
-                className="rounded-md border border-cream/30 px-5 py-3 text-sm"
+                className="rounded-md border border-cream/30 px-5 py-3 text-xs font-bold uppercase tracking-[0.25em]"
               >
                 Gift Strength — $199
               </button>
             </>
           )}
         </div>
-        <p className="mt-8 text-sm text-cream/60">GIFT or GIFTPLUS is applied automatically at checkout.</p>
+        <p className="mt-8 text-sm text-cream/60">Your discount is applied automatically at checkout.</p>
         <p className="mt-1 text-sm text-cream/60">Offer ends December 24 at midnight.</p>
       </section>
 
