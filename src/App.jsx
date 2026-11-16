@@ -117,9 +117,10 @@ const faqs = [
     q: "When does the dancer get it?",
     a: (
       <>
-        Right away. As soon as you check out, they get an email with everything they need to download the
-        app and log in. Their year starts at checkout, and they can start training whenever they’re ready.
-        Giving it in person? Download a{" "}
+        Right away. As soon as you check out, their membership is ready. You get the receipt, and you
+        let them know: they download the app and sign in (or sign up) with the email you bought the gift
+        for. Their year starts at checkout, and they can start training whenever they’re ready. Giving it
+        in person? Download a{" "}
         <a
           href={GIFT_CERTIFICATE_PDF}
           className="underline underline-offset-2"
@@ -212,6 +213,10 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
   async function submit(event) {
     event.preventDefault();
     if (!email.includes("@") || loading) return;
+    if (!purchaserEmail.trim().includes("@")) {
+      setError("Please enter your email so we can send you the receipt.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -223,7 +228,7 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
           period: "annual",
           email,
           gift: true,
-          ...(purchaserEmail ? { purchaserEmail } : {}),
+          purchaserEmail: purchaserEmail.trim(),
           ...(Object.keys(utm).length > 0 ? { utm } : {}),
         }),
       });
@@ -294,18 +299,20 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
               />
             </label>
             <label className="block text-sm text-stone">
-              Your email (for the receipt)
+              Your email (for your receipt)
               <input
+                required
                 type="email"
                 value={purchaserEmail}
                 onChange={(event) => setPurchaserEmail(event.target.value)}
-                placeholder="you@email.com (optional)"
+                placeholder="you@email.com"
                 className="mt-2 w-full rounded-lg border border-ink/15 bg-white px-4 py-3 text-ink outline-none focus:border-ink"
               />
             </label>
             <p className="text-sm leading-relaxed text-stone">
-              Use the dancer’s email address at checkout, not your own. Your discount is
-              applied automatically at checkout.
+              The receipt and billing emails go to you, not the dancer. The dancer gets access
+              by signing in to the app with their email above. Your discount is applied
+              automatically at checkout.
             </p>
             {error && (
               <p role="alert" className="text-sm leading-relaxed text-bronze">
@@ -341,8 +348,9 @@ function ThankYou() {
           <h1 className="font-serif text-5xl leading-[0.95] sm:text-6xl">Thank You!</h1>
           <p className="mt-5 text-xl">Your gift membership is confirmed.</p>
           <p className="mt-3 text-sm leading-relaxed text-stone">
-            The dancer will receive a welcome email with everything they need to download the app and start
-            training.
+            Your receipt is on its way to your inbox. To give the gift, download the certificate below or
+            just tell the dancer. They download the app and sign in (or sign up) with the email you bought
+            the gift for, and their membership is there.
           </p>
         </div>
 
@@ -392,8 +400,8 @@ function ThankYou() {
           <p className="font-serif text-3xl lg:w-44 lg:shrink-0">What’s next?</p>
           <div className="grid flex-1 gap-6 sm:grid-cols-3 sm:divide-x sm:divide-ink/10">
             {[
-              ["They’ll get an email", "With app download and login details.", "mail"],
-              ["Download the app", "On iPhone or Android and log in with their email.", "phone"],
+              ["Give the gift", "Hand over the certificate, or just tell them it’s waiting.", "mail"],
+              ["Download the app", "On iPhone or Android, then sign in or sign up with the gift email.", "phone"],
               ["Start training", "Now or after Nutcracker. It’s ready whenever they are.", "start"],
             ].map(([title, body, icon]) => (
               <div key={title} className="flex gap-3 sm:px-5 sm:first:pl-0">
@@ -725,7 +733,7 @@ export default function App() {
           {[
             ["/images/mouse-pointer-click%201.svg", "01", "Choose a Plan", "Select Strength Athlete or Performance Athlete."],
             ["/images/ticket%201.svg", "02", "Get the Holiday Discount", "Your discount is applied automatically at checkout."],
-            ["/images/mail%201.svg", "03", "Use the Dancer’s Email", "Use the dancer’s email. They’ll get their welcome email right away, so they can start now or save it for after Nutcracker."],
+            ["/images/mail%201.svg", "03", "Use the Dancer’s Email", "Use the dancer’s email. They sign in to the app with it and their membership is there, so they can start now or save it for after Nutcracker."],
           ].map(([icon, n, title, body], index) => (
             <li key={n} className="relative border-t border-[#DDD4C8] pt-8 md:border-0 md:pt-0">
               <span
@@ -747,7 +755,7 @@ export default function App() {
           </span>
           <div>
             <p className="font-serif text-3xl leading-tight sm:text-4xl">
-              Important: Use the dancer’s email address at checkout,{" "}
+              Important: Enter the dancer’s email for their membership,{" "}
               <span className="text-bronze">not your own.</span>
             </p>
             <p className="mt-3 text-sm text-cream/70">
