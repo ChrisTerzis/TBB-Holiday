@@ -278,7 +278,7 @@ function GiftModal({ planId, utm, onClose, onSelect }) {
                 >
                   <span className="block text-xs uppercase tracking-[0.16em] opacity-70">Annual gift</span>
                   <span className="mt-2 block text-2xl leading-none">{item.name}</span>
-                  <span className="mt-2 block text-sm">${item.price}</span>
+                  <span className="mt-2 block font-serif text-sm">${item.price}</span>
                 </button>
               ))}
             </div>
@@ -455,7 +455,7 @@ function PlanCard({ plan, offerEnded, onGift }) {
       </p>
       <h3 className="mt-4 text-4xl tracking-tight">{plan.name}</h3>
       <p className="mt-6 flex items-end gap-3">
-        <span className="text-6xl leading-none">${plan.price}</span>
+        <span className="font-serif text-6xl leading-none">${plan.price}</span>
         <span className={`mb-1 text-2xl line-through ${dark ? "text-cream/40" : "text-stone"}`}>
           ${plan.was}
         </span>
@@ -615,9 +615,9 @@ export default function App() {
           <div>
             <p className="text-[11px] uppercase tracking-[0.24em] text-bronze">Holiday gifting 2026</p>
             <h1 className="mt-6 font-serif text-5xl leading-[0.95] sm:text-7xl">
-              Give the Gift
+              Give the gift
               <br />
-              of Strength.
+              of strength
             </h1>
             <p className="mt-4 font-serif text-4xl leading-[0.95] text-bronze sm:text-6xl">
               to the dancer in
@@ -711,12 +711,12 @@ export default function App() {
       </section>
 
       <section className="mx-auto max-w-[1200px] px-6 pb-24 lg:px-10">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-          <h2 className="font-serif text-5xl leading-[0.95] sm:text-7xl">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
+          <h2 className="shrink-0 font-serif text-5xl leading-[0.95] sm:text-7xl">
             Gifting Made
             <span className="block text-bronze">Simple.</span>
           </h2>
-          <p className="max-w-sm text-lg leading-relaxed text-stone">
+          <p className="max-w-[330px] text-base leading-normal text-stone">
             Three easy steps to give the dancer in your life a full year of strength.
           </p>
         </div>
