@@ -1,7 +1,11 @@
 import { useState } from "react";
 
-const HERO_IMAGE = "/images/hero%201.png";
-const STUDIO_IMAGE = "/images/stageready.png";
+// Files in public/ resolve against Vite's base, so the page also works when
+// built for a sub-path such as /gift/ (VITE_BASE_PATH, see vite.config.js).
+const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
+
+const HERO_IMAGE = asset("images/hero%201.png");
+const STUDIO_IMAGE = asset("images/stageready.png");
 
 const plans = [
   {
@@ -73,7 +77,7 @@ const programs = [
     title: "Effortless Extensions",
     tag: "Mobility + Control",
     copy: "Develop front extension strength, active hip flexor range, posterior chain loading, side body control, and upper body endurance to support the height and stability your extensions demand.",
-    image: "/images/effortlessextensions.png",
+    image: asset("images/effortlessextensions.png"),
     imageAlt: "Dancer in a high side extension en pointe",
   },
   {
@@ -81,7 +85,7 @@ const programs = [
     title: "Turn Like an Athlete",
     tag: "Power + Stability",
     copy: "Build the upper body pulling strength, lower body power, core stability, and turnout control that gives every pirouette a stronger suspension and a cleaner finish.",
-    image: "/images/turnlikeanathlete.png",
+    image: asset("images/turnlikeanathlete.png"),
     imageAlt: "Dancer in a turning pose en pointe",
   },
   {
@@ -89,7 +93,7 @@ const programs = [
     title: "Jumper’s Edge",
     tag: "Explosive Strength",
     copy: "Train explosive hip drive, deep core force transfer, petit allegro reactivity, upper body carriage, and tendon elasticity to add height and power to every jump combination.",
-    image: "/images/jumpersedge.png",
+    image: asset("images/jumpersedge.png"),
     imageAlt: "Dancer in a grand jeté",
   },
   {
@@ -97,7 +101,7 @@ const programs = [
     title: "Stage Ready",
     tag: "Performance Preparation",
     copy: "A performance preparation program built around deep core stability, full body push strength, posterior chain power, reactive jump mechanics, and joint resilience.",
-    image: "/images/stageready.png",
+    image: asset("images/stageready.png"),
     imageAlt: "Dancer in a contemporary port de bras with mirrored figures",
   },
   {
@@ -105,12 +109,12 @@ const programs = [
     title: "Bulletproof Body",
     tag: "Full-Body Conditioning",
     copy: "A full-spectrum conditioning program targeting lower body strength, rotational core control, jump stamina, postural precision, and turnout stability.",
-    image: "/images/bulletproofbody.png",
+    image: asset("images/bulletproofbody.png"),
     imageAlt: "Dancer standing en pointe with an overhead port de bras",
   },
 ];
 
-const GIFT_CERTIFICATE_PDF = "/TBB-Gift-Certificate-final2.pdf";
+const GIFT_CERTIFICATE_PDF = asset("TBB-Gift-Certificate-final2.pdf");
 
 const faqs = [
   {
@@ -166,7 +170,7 @@ const faqs = [
 function Logo() {
   return (
     <img
-      src="/images/logo%201.svg"
+      src={asset("images/logo%201.svg")}
       alt="The Barbell Ballerina"
       className="h-10 w-auto"
     />
@@ -676,7 +680,7 @@ export default function App() {
               aria-hidden="true"
             />
             <figcaption className="absolute bottom-[4.5%] left-1/2 flex -translate-x-1/2 translate-y-1/2 items-center gap-2 bg-cream px-3 py-1.5 text-[11px] text-ink">
-              <img src="/images/gift%201.svg" alt="" className="h-3.5 w-3.5" />
+              <img src={asset("images/gift%201.svg")} alt="" className="h-3.5 w-3.5" />
               A full year · Digital gift
             </figcaption>
           </figure>
@@ -731,9 +735,9 @@ export default function App() {
         <ol className="relative mt-16 grid gap-12 md:grid-cols-3 md:gap-10">
           <span aria-hidden="true" className="absolute inset-x-0 top-3 hidden border-t border-[#DDD4C8] md:block" />
           {[
-            ["/images/mouse-pointer-click%201.svg", "01", "Choose a Plan", "Select Strength Athlete or Performance Athlete."],
-            ["/images/ticket%201.svg", "02", "Get the Holiday Discount", "Your discount is applied automatically at checkout."],
-            ["/images/mail%201.svg", "03", "Use the Dancer’s Email", "Use the dancer’s email. They sign in to the app with it and their membership is there, so they can start now or save it for after Nutcracker."],
+            [asset("images/mouse-pointer-click%201.svg"), "01", "Choose a Plan", "Select Strength Athlete or Performance Athlete."],
+            [asset("images/ticket%201.svg"), "02", "Get the Holiday Discount", "Your discount is applied automatically at checkout."],
+            [asset("images/mail%201.svg"), "03", "Use the Dancer’s Email", "Use the dancer’s email. They sign in to the app with it and their membership is there, so they can start now or save it for after Nutcracker."],
           ].map(([icon, n, title, body], index) => (
             <li key={n} className="relative border-t border-[#DDD4C8] pt-8 md:border-0 md:pt-0">
               <span
@@ -820,7 +824,7 @@ export default function App() {
           </div>
           <div className="flex justify-center">
             <img
-              src="/images/workout.png"
+              src={asset("images/workout.png")}
               alt="A workout screen showing trap bar deadlift"
               className="w-full max-w-md"
             />
